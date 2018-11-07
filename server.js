@@ -12,7 +12,7 @@ app.set('port', process.env.PORT || 8080);
 
 //Middleware para servir archivos estaticos
 app.use(cors());
-app.use(express.static('/webApiUniNinos-SPA/dist/webApiUniNinos-SPA'));
+//app.use(express.static('/webApiUniNinos-SPA/dist/webApiUniNinos-SPA'));
 
 //Middleware bodyparser y morgan
 app.use(morgan('dev'));
