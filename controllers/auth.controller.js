@@ -1,6 +1,6 @@
 const authCtrl = {};
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require('../server.js').bcrypt;
 const User = require("../models/usuarios/regularUser.model");
 const jwt = require("jsonwebtoken");
 
