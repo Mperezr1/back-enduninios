@@ -6,7 +6,7 @@ const cors = require('cors');
 const indexRoutes = require('./routes/index');
   
 //Configuraciones del Servidor
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 8000);
 
 
 
@@ -24,8 +24,6 @@ app.use('/',indexRoutes);
 
 
 //Diciendole a la app el puerto donde va a escuchar.
-app.listen(app.get('port'), () =>{
-
-    console.log('Servidor en puerto', app.get('port'))
-
-})
+app.listen(port, function() {
+    console.log("App corriendo en puerto: " + port);
+});
