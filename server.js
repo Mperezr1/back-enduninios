@@ -4,8 +4,6 @@ const app = express();
 const { mongoose } = require('./database');
 const cors = require('cors');
 const indexRoutes = require('./routes/index');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
   
 //Configuraciones del Servidor
 app.set('port', process.env.PORT || 8000);
@@ -29,5 +27,3 @@ app.use('/',indexRoutes);
 app.listen(app.get('port'), function() {
     console.log("App corriendo en puerto: " + app.get('port'));
 });
-
-module.exports.bcrypt = bcrypt;
