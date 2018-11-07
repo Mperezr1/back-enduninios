@@ -19,19 +19,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.use(express.urlencoded({extended: false}));
-
-const allowedExt = [
-    '.js',
-    '.ico',
-    '.css',
-    '.png',
-    '.jpg',
-    '.woff2',
-    '.woff',
-    '.ttf',
-    '.svg',
-  ];
-
 //Routes
 app.use('/',indexRoutes);
 
