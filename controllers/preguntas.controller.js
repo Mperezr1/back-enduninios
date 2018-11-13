@@ -16,22 +16,36 @@ preguntasCtrl.utilizarCors = (req, res, next) => {
     next();
 }
 
+preguntasCtrl.getPregunta = async (req, res, next) => {
+    preguntaNueva = await preguntaModel.find({})
+    .exec(function(err, preguntaNueva){
+        if(err){
+            console.log("Error");
+        }
+        else {
+            res.json(preguntaNueva);
+        }
+    });
+}
+
 //Este metodo aqui ya ingresa preguntas a la DB si esta conectada.
-preguntasCtrl.agregarPregunta = (req, res, next) =>{
-    const preguntaNueva = new preguntaModel(req.body);
+preguntasCtrl.agregarPregunta = async (req, res, next) =>{
+
+    const preguntaNueva = new  preguntaModel(req.body);
+    console.log(req.body);
     preguntaNueva.save();
     console.log(preguntaNueva);
-    res.status(201).json({
-        message: 'Post Añadido'
-    });
-    next();
+    res.status(201).json({message: "Pregunta Añadida a la base de datos"});
 }
 
 preguntasCtrl.borrarPregunta = async (req, res, next) => {
     console.log("entra al controller");
     console.log(req.body.pregunta);
-    const preguntas = await preguntaModel.findOneAndDelete({ pregunta: req.body.pregunta }).catch(err => {console.log(err)});
-    console.log(preguntas.body.pregunta);
+    preguntaNueva = await preguntaModel.findOneAndRemove({ pregunta: req.body.pregunta }).update().catch(function(reason){
+        console.log("Archivo no borrado");
+    });
+    console.log(preguntaNueva);
+    res.status(201).json({message: "Pregunta eliminada a la base de datos"});
 }
 
 module.exports = preguntasCtrl;

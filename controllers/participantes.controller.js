@@ -21,6 +21,15 @@ participantesCtrl.agregarParticipante = (req, res, next) =>{
     
 }
 
+//Devuelve un participante según el número de documento ingresado
+participantesCtrl.borrarParticipantes = async (req, res, next) => {
+    console.log(req.params.documento);
+    const participantes = await participantePruebaModel.findByIdAndDelete(req.params.id);
+    //const participantes = await participanteModel.find({ documento: req.params.documento });
+    console.log(participantes);
+    res.json(participantes);
+    
+}
 
 //Devuelve un participante según el número de documento ingresado
 participantesCtrl.getParticipanteDoc = async (req, res, next) => {
@@ -65,14 +74,30 @@ participantesCtrl.getParticipanteGru = async (req, res, next) => {
             integrantes.push(participante);
 
         }
-
         console.log(integrantes);
         res.json(integrantes);
     }
 }
 
-participantesCtrl.editParticipante = function () {
-    
+participantesCtrl.getParticipantes = async (req, res, next) => {
+    const participantes = await participantePruebaModel.find();
+    //const participantes = await participanteModel.find();
+    res.json(participantes); 
+}
+
+
+//Edita participantes según el código entregado
+participantesCtrl.editParticipante = async (req, res, next) => {
+    var id = req.params.id;
+    var campo = req.params.campo;
+    var valor = req.params.valor;
+    var query = {};
+
+    query[campo] = valor;
+
+    const participantes = await participantePruebaModel.findByIdAndUpdate(id, { $set: query });
+    console.log(participantes);
+    res.json(participantes); 
 }
 
 participantesCtrl.asignarGrupo = async (req, res, next) => {

@@ -66,20 +66,48 @@ estadisticasCtrl.guardarEstadisticas = async (req, res, next) => {
 };
 
 estadisticasCtrl.getEstadisticas = async (req, res, next) => {
-    await estadisticasPruebaModel.find({},function(err,docs){ 
-         console.log('Estadisticas a utilizar: ');
-         console.log(docs);
-         console.log('Cantidad de estadisticas');
-         console.log(docs.length);
-     })
-     //Recordar que documents es lo que pasa en la anterior funcion de find
-         .then(documents => {
-         res.status(200).json({
-         message: 'Se alcanzo el post',  
-         posts: documents
-         });
-     });    
+    var participacionAnual = [];
+    console.log("Se busco cantidad de participacion anual");
+    //Primero hallamos la estadistica para todos los participantes por cada año, luego se anidan las demas estadisticas
+    for(i=2000; i< 2019;i++){
+    await participantePruebaModel.find({"participaciones.año": i},function(err,docs){ 
+         participacionAnual.push(docs.length);
+     });
+    }
+    console.log(participacionAnual);
+    res.status(200).json({
+        message: 'Post Con los participantes de cada año',
+        participacionAn: participacionAnual
+    }); 
  }
+
+ estadisticasCtrl.getEstadisticasPorColegioPActivo = async (req, res, next) => {
+    const colegios = ['colombo americano', 'colombo frances', 'colombo ingles','la compañia de maria', 'montessori', 'the columbus school','seminario corazonista','inem'];
+    var participanteActivo = [];
+    //Tiene que quedar {colegio: de la lista, activo: numero de activos que tiene, inactivo: numero de inactivos que tiene, egresado: numero de egresados que tiene}
+    console.log("Se busco cantidad de colegios que tienen estudiantes activos, inactivos o egresados");
+    for(i=0; i< colegios.length; i++){
+    const dataElement = [];
+    await participantePruebaModel.find({"estado": "Activo", "colegioActual": colegios[i]},function(err,docs){ 
+         dataElement.push(docs.length);
+     });
+    await participantePruebaModel.find({"estado": "Egresado", "colegioActual": colegios[i]},function(err,docs){ 
+        dataElement.push(docs.length);
+    });
+    await participantePruebaModel.find({"estado": "Inactivo", "colegioActual": colegios[i]},function(err,docs){ 
+        dataElement.push(docs.length);
+    });
+
+    participanteActivo.push(dataElement);
+    }
+
+    console.log(participanteActivo);
+    res.status(200).json({
+        message: 'Post con los participantes activos por cada colegio',
+        participacionAn: participanteActivo
+    }); 
+ }
+
 
  
 module.exports = estadisticasCtrl;

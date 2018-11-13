@@ -3,8 +3,6 @@ const programaModel = require('../models/programa.model');
 
 //Este metodo aqui ya ingresa cronogramas a la DB si esta esta conectada.
 cronogramaCtrl.agregarActividad = async (req, res, next) =>{
-    console.log("entra ")
-
     actividadNueva = await programaModel.findOne({nombre: req.params.programa});
 
     if(actividadNueva == null) {

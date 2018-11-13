@@ -23,7 +23,7 @@ bcrypt.hash(req.body.password, 10)
     });
     user.save()
     .then(result => {
-        console.log("Usuario Creado: ");
+        console.log("Usuario Creado ");
         console.log(result);
         res.status(201).json({
             message: 0
@@ -56,7 +56,40 @@ authCtrl.signupAdmin = (req,res,next) => {
         });
         user.save()
         .then(result => {
-            console.log("Usuario Creado: ");
+            console.log("Usuario Creado como admin");
+            console.log(result);
+            res.status(201).json({
+                message: 0
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 1,
+                error: err
+            });
+        });
+    });  
+
+};
+
+authCtrl.signupMonitor = (req,res,next) => {
+
+    bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+    
+        const user = new User({
+            nombre : req.body.nombre , 
+            apellido: req.body.apellido,
+            prioridad: 1,
+            documento: req.body.documento, 
+            numeroDeContacto: req.body.contacto, 
+            email: req.body.email, 
+            password: hash
+        
+        });
+        user.save()
+        .then(result => {
+            console.log("Usuario Creado como monitor ");
             console.log(result);
             res.status(201).json({
                 message: 0
@@ -97,7 +130,9 @@ User.findOne({email: req.body.email})
     res.status(200).json({
         message: "Usuario logeado exitosamente",
         token:token, 
-        priorty: usuarioEncontrado.prioridad
+        priorty: usuarioEncontrado.prioridad,
+        nombre: usuarioEncontrado.nombre,
+        documento: usuarioEncontrado.documento
     });
 })
 .catch(err => {
