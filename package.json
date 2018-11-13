@@ -3,20 +3,19 @@
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": "10.x"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mperezr1/webApiUniNinos.git"
-  },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mperezr1/webApiUniNinos/issues"
+    "url": "https://github.com/mperezr1/herokuUnininos/issues"
   },
-  "homepage": "https://github.com/mperezr1/webApiUniNinos#readme",
   "dependencies": {
     "@types/cors": "^2.8.4",
     "bcrypt": "^3.0.2",

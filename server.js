@@ -7,7 +7,7 @@ const indexRoutes = require('./routes/index');
 const participantePruebaModel = require('./models/Pruebas/participantePrueba.model');
   
 //Configuraciones del Servidor
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8000);
 
 //Middleware para servir archivos estaticos
 app.use(cors());
