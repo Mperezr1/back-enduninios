@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const programaSchema = Schema({
-    nombre: {type: String, required: true},
+    nombre: {type: String, required: false},
     fechaInicio: {type: Date},
     fechaFin: {type: Date},
     actividades: [{

@@ -1,12 +1,12 @@
 const estadisticasCtrl = {};
-const participantePruebaModel = require('../models/Pruebas/participantePrueba.model');
+const participanteModel = require('../models/participante.model');
 const estadisticasPruebaModel = require('../models/Pruebas/estadisticas-colegios.model');
 
 estadisticasCtrl.guardarEstadisticas = async (req, res, next) => {
         //Si la estadistica es igual a cantidad de estudiantes procedemos a hallar todos los participantes, y hallar las cantidades para cada colegio
     if(req.body.atributoSeleccionado === 'Cantidad estudiantes'){
 
-       await participantePruebaModel.find({}, function(err, docs){
+       await participanteModel.find({}, function(err, docs){
             var datosQueCumplenParametros = [];
             dataToSave = [];
             const varNames = req.body.parametrosAUsar;
@@ -66,14 +66,22 @@ estadisticasCtrl.guardarEstadisticas = async (req, res, next) => {
 };
 
 estadisticasCtrl.getEstadisticas = async (req, res, next) => {
-    var participacionAnual = [];
     console.log("Se busco cantidad de participacion anual");
+    participacionAnual =[];
     //Primero hallamos la estadistica para todos los participantes por cada año, luego se anidan las demas estadisticas
-    for(i=2000; i< 2019;i++){
-    await participantePruebaModel.find({"participaciones.año": i},function(err,docs){ 
-         participacionAnual.push(docs.length);
-     });
-    }
+    await participanteModel.find({},function(err,docs){
+        var cont = 0; 
+        console.log(docs.length);
+         docs.forEach(function(item){
+             if(item.numParticipaciones > 0 ){
+                cont ++;
+             }
+         });
+         participacionAnual.push(docs.length - cont);
+         participacionAnual.push(cont);
+        });
+
+    
     console.log(participacionAnual);
     res.status(200).json({
         message: 'Post Con los participantes de cada año',
@@ -88,13 +96,13 @@ estadisticasCtrl.getEstadisticas = async (req, res, next) => {
     console.log("Se busco cantidad de colegios que tienen estudiantes activos, inactivos o egresados");
     for(i=0; i< colegios.length; i++){
     const dataElement = [];
-    await participantePruebaModel.find({"estado": "Activo", "colegioActual": colegios[i]},function(err,docs){ 
+    await participanteModel.find({"estado": "Activo", "colegioActual": colegios[i]},function(err,docs){ 
          dataElement.push(docs.length);
      });
-    await participantePruebaModel.find({"estado": "Egresado", "colegioActual": colegios[i]},function(err,docs){ 
+    await participanteModel.find({"estado": "Egresado", "colegioActual": colegios[i]},function(err,docs){ 
         dataElement.push(docs.length);
     });
-    await participantePruebaModel.find({"estado": "Inactivo", "colegioActual": colegios[i]},function(err,docs){ 
+    await participanteModel.find({"estado": "Inactivo", "colegioActual": colegios[i]},function(err,docs){ 
         dataElement.push(docs.length);
     });
 

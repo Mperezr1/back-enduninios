@@ -9,8 +9,7 @@ mongoose.connect(BaseDatos,{ useNewUrlParser: true })
     })
     .catch(() => {
         console.log('Error al conectarse a Base de Datos')
-    });  
-
+    });
 module.exports = mongoose;  
 
 

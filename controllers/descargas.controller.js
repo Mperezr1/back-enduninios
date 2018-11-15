@@ -1,5 +1,5 @@
 const descargaCtrl = {}
-const participantePruebaModel = require('../models/Pruebas/participantePrueba.model');
+const participanteModel = require('../models/participante.model');
 var mongoXlsx = require('mongo-xlsx');
 var mime = require('mime-types')
 var path = require('path');
@@ -8,7 +8,7 @@ descargaCtrl.descargaParticipantes = async(req,res,next) =>{
     var filepath = path.join(__dirname,'../descargados') +'/Participantes/'+ req.body.filename;
 
     console.log(filepath);
-    var consulta = await participantePruebaModel.find({}).lean();
+    var consulta = await participanteModel.find({}).lean();
     var data = consulta
     var options =  {
     save: true,

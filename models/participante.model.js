@@ -1,54 +1,117 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-
 const participanteSchema = Schema({
-    nombre: {type: String, required: false},
-    apellidos: {type: String, required: false},
-    nombreCompleto: {type: String, required: false},
-    tipoDocumento: {type: String, required: false},
-    documento: {type: String, required: false},
-    fechaNacimiento: {type: Date, required: false},
-    añoIngreso: {type: Number, required: false},
-    lastUpdate: {type: Date},
-    estado: {type: String, required: false},
-    participaciones: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Programa'}],
-    usoDeImagen: {type: String, required: false},
-    genero: {type: String, required: false},
-    numerosContacto: [String],
-    direccion: {type: String, required: false},
-    estrato: {type: Number, required: false},
-    barrio: {type : mongoose.Schema.Types.ObjectId, ref: 'Barrio'},
-    email: {type: String, required: false},
-    eps: {type: String, required: false},
-    origen: {
-        tipoIngreso: {type: String, required: false},
-        gradoIngreso: {type: String, required: false},
-        colegioIngreso: {type : mongoose.Schema.Types.ObjectId, ref: 'Colegio'}
+    estadodb: {type: String},
+    estado: {type: String},
+    imagen: {type: String},
+    edadParticipaciones: {type: Number},
+    genero: {type: String},
+    nombre: {type: String},
+    nombreCompleto: {type: String},
+    tipoDocumento: {type: String},
+    documento: {type: String},
+    fechaNacimiento: {type: String},
+    telefono: {type: String},
+    celular: {type: String},
+    direccion: {type: String},
+    barrio: {
+        nombre: {type: String},
+        comuna: {type: String},
+        municipio: {type: String}
     },
-    colegioActual: {type : mongoose.Schema.Types.ObjectId, ref: 'Colegio'},
-    gradoActual: {type: String, required: false},
-    acudientes: [{
-        nombreCompleto: {type: String, required: false},
-        tipoDocumento: {type: String, required: false},
-        documento: {type: String, required: false},
-        relacion: {type: String, required: false},
-        celular: {type: String, required: false},
-        email: {type: String, required: false},
-        nivelFormacion: {type: String, required: false},
-        areaConocimiento: {type: String, required: false},
-        ocupacion: {type: String, required: false},
-        lugarTrabajo: {type: String, required: false},
-        telefonoTrabajo: {type: String, required: false},
-    }],
-    activo: {type: Boolean, required: false},
-    egresado: {type: Boolean, required: false},
+    estrato: {type: String},
+    email: {type: String},
+    eps: {type: String},
+    origen: {
+        tipoIngreso: {type: String},
+        colegioIngreso: {
+            nombre: {type: String},
+            tipo: {type: String},
+            telefono: {type: String},
+            email: {type: String},
+            sitioWeb: {type: String},
+            direccion: {type: String},
+            barrio: {
+                nombre: {type: String},
+                comuna: {type: String},
+                municipio: {type: String}
+            
+            },
+            estrato: {type: String},
+            tipoCalendario: {type: String},
+            caracter: {type: String},
+            jornada: {type: String},
+            numeroEstudiantes: {type: String},
+            contactos: [{
+                nombreCompleto: {type: String},
+                cargo: {type: String},
+                tipoContacto: {type: String},
+                email: {type: String},
+                telefono: {type: String},
+                celular: {type: String}
+            }]
+        },
+        gradoIngreso: {type: String},
+        añoIngreso: {type: String},
+    },
+    colegioActual:{
+        nombre: {type: String},
+        tipo: {type: String},
+        telefono: {type: String},
+        email: {type: String},
+        sitioWeb: {type: String},
+        direccion: {type: String},
+        barrio: {
+            nombre: {type: String},
+            comuna: {type: String},
+            municipio: {type: String}
+        
+        },
+        estrato: {type: String},
+        tipoCalendario: {type: String},
+        caracter: {type: String},
+        jornada: {type: String},
+        numeroEstudiantes: {type: String},
+        contactos: [{
+            nombreCompleto: {type: String},
+            cargo: {type: String},
+            tipoContacto: {type: String},
+            email: {type: String},
+            telefono: {type: String},
+            celular: {type: String}
+        }]
+    },
+    gradoActual: {type: String},
     ocupacion: {type: String},
     areaLaboral: {type: String},
     nivelFormacion: {type: String},
     programaAcademico: {type: String},
+    universidad: {type : String},
     observaciones: {type: String},
-    universidad: {type : mongoose.Schema.Types.ObjectId, ref: 'Universidad'},
-});
+    acudientes: [{
+            relacion: {type: String},
+            nombreCompleto: {type: String},
+            tipoDocumento: {type: String},
+            documento: {type: String},
+            celular: {type: String},
+            email: {type: String},
+            nivelFormacion: {type: String},
+            areaConocimiento: {type: String},
+            ocupacion: {type: String},
+            lugarTrabajo: {type: String},
+            telefonoTrabajo: {type: String},
+    }],
+    activo: {type: String},
+    participaciones: [{
+        programa: {type: String},
+        nombre: {type: String},
+        grupo: {type: String}
+    }],
+    participacionExpediciones: {type: Boolean},
+    numParticipaciones: {type: Number, default: 0}   
+ });
+
+
 
 module.exports = mongoose.model('Participante', participanteSchema);

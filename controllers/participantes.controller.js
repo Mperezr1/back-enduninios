@@ -1,8 +1,8 @@
 const participantesCtrl = {};
 const participanteModel = require('../models/participante.model');
-const participantePruebaModel = require('../models/Pruebas/participantePrueba.model');
-const grupoPruebaModel = require('../models/Pruebas/grupoPrueba.model');
+const grupoModel = require('../models/grupo.model');
 const mongoose =require ('mongoose');
+var path = require('path');
 
 
 
@@ -10,8 +10,7 @@ const mongoose =require ('mongoose');
 
 //Este metodo aqui ya ingresa participantes a la DB si esta esta conectada.
 participantesCtrl.agregarParticipante = (req, res, next) =>{
-    //const participanteNuevo = new participantePruebaModel(req.body);
-    const participanteNuevo = new participantePruebaModel(req.body);
+    const participanteNuevo = new participanteModel(req.body);
     console.log(req.body.celular);
     participanteNuevo.save();
     console.log(participanteNuevo);
@@ -24,7 +23,7 @@ participantesCtrl.agregarParticipante = (req, res, next) =>{
 //Devuelve un participante según el número de documento ingresado
 participantesCtrl.borrarParticipantes = async (req, res, next) => {
     console.log(req.params.documento);
-    const participantes = await participantePruebaModel.findByIdAndDelete(req.params.id);
+    const participantes = await participanteModel.findByIdAndDelete(req.params.id);
     //const participantes = await participanteModel.find({ documento: req.params.documento });
     console.log(participantes);
     res.json(participantes);
@@ -34,7 +33,7 @@ participantesCtrl.borrarParticipantes = async (req, res, next) => {
 //Devuelve un participante según el número de documento ingresado
 participantesCtrl.getParticipanteDoc = async (req, res, next) => {
     console.log(req.params.documento);
-    const participantes = await participantePruebaModel.find({ documento: req.params.documento });
+    const participantes = await participanteModel.find({ documento: req.params.documento });
     //const participantes = await participanteModel.find({ documento: req.params.documento });
     console.log(participantes);
     res.json(participantes);
@@ -44,7 +43,7 @@ participantesCtrl.getParticipanteDoc = async (req, res, next) => {
 //Devuelve un participante según el nombre ingresado
 participantesCtrl.getParticipanteNom = async (req, res, next) => {
     console.log(req.params.nombre);
-    const participantes = await participantePruebaModel.find({ nombre: req.params.nombre});
+    const participantes = await participanteModel.find({ "nombreCompleto": { "$regex": req.params.nombre, "$options": "i" } });
     //const participantes = await participanteModel.find({ nombre: req.params.nombre});
     console.log(participantes);
     res.json(participantes); 
@@ -54,7 +53,7 @@ participantesCtrl.getParticipanteNom = async (req, res, next) => {
 //Devuelve un participante según el colegio ingresado
 participantesCtrl.getParticipanteCol = async (req, res, next) => {
     console.log(req.params.colegio);
-    const participantes = await participantePruebaModel.find({ 'colegio.nombre': req.params.colegio});
+    const participantes = await participanteModel.find({ "colegioActual.nombre": { "$regex": req.params.colegio, "$options": "i" } });
     //const participantes = await participanteModel.find({ nombre: req.params.nombre});
     console.log(participantes);
     res.json(participantes); 
@@ -63,14 +62,14 @@ participantesCtrl.getParticipanteCol = async (req, res, next) => {
 
 //Devuelve un participante según el grupo ingresado
 participantesCtrl.getParticipanteGru = async (req, res, next) => {
-    const grupo = await grupoPruebaModel.findOne({ codigoGrupo: req.params.grupo });
+    const grupo = await grupoModel.findOne({ codigoGrupo: req.params.grupo });
     console.log(req.params.grupo);
     if(grupo.integrantes != null){
         var integrantes = [];
 
         for(i = 0; i < grupo.integrantes.length; i++){
             
-            const participante = await participantePruebaModel.findById(grupo.integrantes[i]);
+            const participante = await participanteModel.findById(grupo.integrantes[i]);
             integrantes.push(participante);
 
         }
@@ -79,8 +78,16 @@ participantesCtrl.getParticipanteGru = async (req, res, next) => {
     }
 }
 
+//Devuelve un participante según el acudiente ingresado
+participantesCtrl.getParticipanteAcu = async (req, res, next) => {
+    console.log(req.params.acudiente);
+    const participantes = await participanteModel.find({ 'acudientes.documento': req.params.acudiente});
+    console.log(participantes);
+    res.json(participantes); 
+}
+
 participantesCtrl.getParticipantes = async (req, res, next) => {
-    const participantes = await participantePruebaModel.find();
+    const participantes = await participanteModel.find();
     //const participantes = await participanteModel.find();
     res.json(participantes); 
 }
@@ -95,7 +102,7 @@ participantesCtrl.editParticipante = async (req, res, next) => {
 
     query[campo] = valor;
 
-    const participantes = await participantePruebaModel.findByIdAndUpdate(id, { $set: query });
+    const participantes = await participanteModel.findByIdAndUpdate(id, { $set: query });
     console.log(participantes);
     res.json(participantes); 
 }
@@ -103,16 +110,16 @@ participantesCtrl.editParticipante = async (req, res, next) => {
 participantesCtrl.asignarGrupo = async (req, res, next) => {
 
     console.log(req.params);
-    var consulta2 = await participantePruebaModel.findOne({documento:req.params.documento});
+    var consulta2 = await participanteModel.findOne({documento:req.params.documento});
     var id = consulta2._id;
     const code= {
         $addToSet:{integrantes:id}   
       };
-    const consulta = await grupoPruebaModel.findOneAndUpdate({ codigoGrupo: req.params.idGrupo },code,function(err,grupos){
+    const consulta = await grupoModel.findOneAndUpdate({ codigoGrupo: req.params.idGrupo },code,function(err,grupos){
         if(err) console.log(err);
 
    });
-   var consulta3 = await grupoPruebaModel.find({}).populate('integrantes');
+   var consulta3 = await grupoModel.find({}).populate('integrantes');
    consulta3.forEach(element => {
        console.log(element.integrantes);
    });
@@ -121,7 +128,7 @@ participantesCtrl.asignarGrupo = async (req, res, next) => {
     
 }
 participantesCtrl.addGrupo = async (req, res, next) => {
-    const grupo = await grupoPruebaModel(req.body);
+    const grupo = await grupoModel(req.body);
     console.log(req.body);
     console.log(grupo);
     grupo.save();
@@ -131,6 +138,15 @@ participantesCtrl.addGrupo = async (req, res, next) => {
 
     
 }
+
+participantesCtrl.saveImage = async (req,res, next) =>{
+    console.log(req.params);
+
+    const ruta = '/imagen'+req.params.name;
+    var image1 = await participanteModel.findOne({ nombre: req.params.name}).update({imagen: ruta}).catch(function(reason){
+        console.log("Imagen Guardada");
+    });
+};
 
 
 module.exports = participantesCtrl;

@@ -36,7 +36,7 @@ router.post("/api/auth/signupAdmin", auth.signupAdmin);
 router.post("/api/auth/signupMonitor", auth.signupMonitor);
 router.post("/api/auth/login", auth.login);
 
-// router.get("/api/profile/acudientes", profile.getAcudientes);
+router.get("/api/profile/acudientes",checkAuth, profile.getAcudientes);
 
 router.get("/api/estadisticasList", checkAuthP2 ,estadistica.getEstadisticas);
 //La siguiente ruta no esta funcionando por el momento en el back-end
@@ -50,6 +50,7 @@ router.get('/api/consultasColegio/:colegio',checkAuth , participante.getParticip
 router.get('/api/consultas',checkAuth , participante.getParticipantes);
 router.delete('/api/consultasborrarParticipante/:id',checkAuth , participante.borrarParticipantes);
 router.post('/api/consultas/Descarga',checkAuth,descargas.descargarConsulta);
+router.get('/api/consultasAcudiente/:acudiente',checkAuth , participante.getParticipanteAcu);
 
 router.put('/api/editParticipante/:id/:campo/:valor',checkAuth, participante.editParticipante);
 router.put('/api/asignacionGruposSet/:idGrupo/:documento',checkAuth, participante.asignarGrupo);
@@ -57,16 +58,18 @@ router.get('/api/asignacionGruposConsulta/:documento',checkAuth , participante.g
 router.post('/api/pruebas',checkAuth , participante.addGrupo);
 router.post('/api/descargaParticipantes',checkAuth,descargas.descargaParticipantes)
 //router.post('/api/participantesGrupo', participante.agregarGrupo);
-
+ 
 router.put('/:id',checkAuth , participante.editParticipante);
 // router.get('(api/modificar', (req, res) =>{
 //   res.send("recibo de modificar");
 // });
 
-router.post('/api/preguntas',checkAuth , pregunta.getPregunta);
-router.post('/api/getPregunta',checkAuth , pregunta.getPregunta);
+router.post('api/participantes/foto', checkAuth, participante.saveImage);
+
+router.get('/api/preguntas',checkAuth , pregunta.getPregunta);
+router.get('/api/preguntas/getPregunta',checkAuth , pregunta.getPregunta);
 router.post('/api/preguntas/modificar/modificar-Agregar',checkAuth , pregunta.agregarPregunta);
-router.post('/api/preguntas/modificar/modificar-Eliminar',checkAuth ,pregunta.borrarPregunta);
+router.delete('/api/preguntas/borrarPregunta/:id',checkAuth ,pregunta.borrarPregunta);
 
 
 router.put('/api/cronogramaAgregar/:programa',checkAuth , cronograma.agregarActividad);

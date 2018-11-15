@@ -17,15 +17,13 @@ preguntasCtrl.utilizarCors = (req, res, next) => {
 }
 
 preguntasCtrl.getPregunta = async (req, res, next) => {
-    preguntaNueva = await preguntaModel.find({})
-    .exec(function(err, preguntaNueva){
-        if(err){
-            console.log("Error");
-        }
-        else {
-            res.json(preguntaNueva);
-        }
-    });
+    preguntaNueva = await preguntaModel.find();
+    console.log("buscando preguntas");
+    if(preguntaNueva == null) {
+        res.status(201).json(null);
+    } else {
+        res.status(201).json(preguntaNueva);
+    }
 }
 
 //Este metodo aqui ya ingresa preguntas a la DB si esta conectada.
@@ -39,13 +37,10 @@ preguntasCtrl.agregarPregunta = async (req, res, next) =>{
 }
 
 preguntasCtrl.borrarPregunta = async (req, res, next) => {
-    console.log("entra al controller");
-    console.log(req.body.pregunta);
-    preguntaNueva = await preguntaModel.findOneAndRemove({ pregunta: req.body.pregunta }).update().catch(function(reason){
-        console.log("Archivo no borrado");
-    });
+    console.log(req.params.pregunta);    
+    const preguntaNueva = await preguntaModel.findByIdAndDelete(req.params.id);
     console.log(preguntaNueva);
-    res.status(201).json({message: "Pregunta eliminada a la base de datos"});
+    res.status(201).json(preguntaNueva);
 }
 
 module.exports = preguntasCtrl;

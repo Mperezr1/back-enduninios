@@ -3,25 +3,25 @@ var ObjectId = require('mongodb').ObjectID;
 const { Schema } = mongoose;
 
 const colegioSchema = Schema({
-    nombre: {type: String, require: true},
-    tipo: {type: String, require: true},
-    telefono: {type: String, require: true},
-    email: {type: String, require: true},
+    nombre: {type: String, require: false},
+    tipo: {type: String, require: false},
+    telefono: {type: String, require: false},
+    email: {type: String, require: false},
     sitioWeb: {type: String},
-    direccion: {type: String, require: true},
+    direccion: {type: String, require: false},
     barrio: {type : ObjectId, ref: 'Barrio'},
-    estrato: {type: String, require: true},
-    tipoCalendario: {type: String, require: true},
-    caracter: {type: String, require: true},
-    jornada: {type: String, require: true},
-    numeroEstudiantes: {type: String, require: true},
+    estrato: {type: String, require: false},
+    tipoCalendario: {type: String, require: false},
+    caracter: {type: String, require: false},
+    jornada: {type: String, require: false},
+    numeroEstudiantes: {type: String, require: false},
     contactos: [{
-        nombreCompleto: {type: String, require: true},
-        cargo: {type: String, require: true},
-        tipoContacto: {type: String, require: true},
-        email: {type: String, require: true},
-        telefono: {type: String, require: true},
-        celular: {type: String, require: true}
+        nombreCompleto: {type: String, require: false},
+        cargo: {type: String, require: false},
+        tipoContacto: {type: String, require: false},
+        email: {type: String, require: false},
+        telefono: {type: String, require: false},
+        celular: {type: String, require: false}
     }]
 });
 

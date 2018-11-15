@@ -1,10 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-const { mongoose } = require('./database');
 const cors = require('cors');
 const indexRoutes = require('./routes/index');
 const participantePruebaModel = require('./models/Pruebas/participantePrueba.model');
+const participante = require('./models/participante.model');
+const { mongoose } = require('./database');
   
 //Configuraciones del Servidor
 app.set('port', process.env.PORT || 8000);
@@ -29,3 +30,4 @@ app.listen(app.get('port'), () =>{
     console.log('Servidor en puerto', app.get('port'))
 
 });
+
